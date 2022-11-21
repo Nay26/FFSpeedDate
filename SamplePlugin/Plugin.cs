@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.Command;
+using Dalamud.Game.Command;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using System.IO;
@@ -11,7 +11,7 @@ namespace FFSpeedDate
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "FFSpeedDate";
-        private const string CommandName = "/pmycommand";
+        private const string CommandName = "/speeddate";
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
