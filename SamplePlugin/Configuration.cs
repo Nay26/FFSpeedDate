@@ -1,9 +1,10 @@
-﻿using Dalamud.Configuration;
+using Dalamud.Configuration;
 using Dalamud.Plugin;
 using System;
 
-namespace FFSpeedDate
-{
+namespace FFSpeedDate { 
+    public enum MainTab { Config, PlayerList, Match, About }
+
     [Serializable]
     public class Configuration : IPluginConfiguration
     {

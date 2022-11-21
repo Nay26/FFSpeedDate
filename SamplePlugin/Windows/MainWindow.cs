@@ -1,48 +1,143 @@
-using System;
-using System.Numerics;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
-using ImGuiScene;
+using Lumina.Excel.GeneratedSheets;
+using System;
+using System.Numerics;
+using FFSpeedDate.Modules;
 
 namespace FFSpeedDate.Windows;
 
 public class MainWindow : Window, IDisposable
 {
-    private TextureWrap GoatImage;
-    private Plugin Plugin;
+    private readonly FFSpeedDate plugin;
+    public static Configuration Config { get; set; }
+    public Match Match;
+    public PlayerList PlayerList;
 
-    public MainWindow(Plugin plugin, TextureWrap goatImage) : base(
-        "My Amazing Window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+    private MainTab currentMainTab = MainTab.PlayerList;
+
+    public MainWindow(FFSpeedDate plugin) : base(
+        "FF Speed Date", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(375, 330),
+            MinimumSize = new Vector2(375, 630),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
 
-        this.GoatImage = goatImage;
-        this.Plugin = plugin;
+        this.plugin = plugin;
+
+        Match = new Match(this);
+        PlayerList = new PlayerList(this);
+    }
+
+    public void Initialize()
+    {
+        Match = new Match(this);
+        PlayerList = new PlayerList(this);
     }
 
     public void Dispose()
     {
-        this.GoatImage.Dispose();
     }
 
     public override void Draw()
     {
-        ImGui.Text($"The random config bool is {this.Plugin.Configuration.SomePropertyToBeSavedAndWithADefault}");
+        DrawMainTabs();
 
-        if (ImGui.Button("Show Settings"))
+        switch (currentMainTab)
         {
-            this.Plugin.DrawConfigUI();
+            case MainTab.Config:
+                {
+                    DrawConfig();
+                    break;
+                }
+            case MainTab.PlayerList:
+                {
+                    PlayerList?.DrawPlayerList();
+                    break;
+                }
+            case MainTab.Match:
+                {
+                    Match.DrawMatch();
+                    break;
+                }
+            case MainTab.About:
+                {
+                    DrawAbout();
+                    break;
+                }
+            default:
+                PlayerList?.DrawPlayerList();
+                break;
         }
 
-        ImGui.Spacing();
+    }
 
-        ImGui.Text("Have a goat:");
-        ImGui.Indent(55);
-        ImGui.Image(this.GoatImage.ImGuiHandle, new Vector2(this.GoatImage.Width, this.GoatImage.Height));
-        ImGui.Unindent(55);
+    private void DrawMainTabs()
+    {
+        if (ImGui.BeginTabBar("FFSpeedDateMainTabBar", ImGuiTabBarFlags.NoTooltip))
+        {
+            if (ImGui.BeginTabItem("Config###FFSpeedDate_Config_MainTab"))
+            {
+                currentMainTab = MainTab.Config;
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem("Player List###FFSpeedDate_PlayerList_MainTab"))
+            {
+                currentMainTab = MainTab.PlayerList;
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem("Match###FFSpeedDate_Match_MainTab"))
+            {
+                currentMainTab = MainTab.Match;
+                ImGui.EndTabItem();
+            }
+
+            if (ImGui.BeginTabItem("About###FFSpeedDate_About_MainTab"))
+            {
+                currentMainTab = MainTab.About;
+                ImGui.EndTabItem();
+            }
+
+            ImGui.EndTabBar();
+            ImGui.Spacing();
+        }
+    }
+
+    private void DrawConfig()
+    {
+        ImGui.Text("Use Preferences?");
+
+        ImGui.Columns(1);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5);
+
+        if (ImGui.Button("Save"))
+        {
+            Config.Save();
+        }
+    }
+
+    private void DrawAbout()
+    {
+        ImGui.TextColored(ImGuiColors.DalamudGrey, "About");
+        ImGui.TextWrapped("Made by Adiana Umbra@Cerberus");
+        ImGui.TextWrapped("Thanks to Primu Pyon@Omega who's code I have shamelessly modified");
+        ImGui.TextWrapped("Originally intended for use by staff working for Emerald Lynx Club @Omega-Goblet-W10P30");
+        ImGui.TextWrapped("But made available for use by anyone who happens upon my repo link.");
+        ImGui.Separator();
+
+        ImGui.Columns(1);
+        ImGui.Separator();
+        ImGuiHelpers.ScaledDummy(5);
+        if (ImGui.Button("Close"))
+        {
+            IsOpen = false;
+        }
     }
 }
