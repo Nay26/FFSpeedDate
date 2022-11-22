@@ -1,0 +1,15 @@
+{
+  "Author": "Adiana",
+  "Name": "FFSpeedDate",
+  "InternalName": "FFSpeedDate",
+  "AssemblyVersion": "0.0.0.1",
+  "Description": "/speeddate",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "sample",
+    "plugin"
+  ],
+  "DalamudApiLevel": 7,
+  "LoadPriority": 0,
+  "Punchline": "A speed dating matchmaker"
+}
