@@ -5,11 +5,13 @@ using System.IO;
 using System.Reflection;
 using Dalamud.Interface.Windowing;
 using FFSpeedDate.Windows;
+using Dalamud.Game.ClientState;
 
 namespace FFSpeedDate
 {
     public sealed class FFSpeedDate : IDalamudPlugin
     {
+        [PluginService] public static ClientState ClientState { get; private set; } = null!;
         public string Name => "FFSpeedDate";
         private const string CommandName = "/speeddate";
 
@@ -17,7 +19,6 @@ namespace FFSpeedDate
         private CommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("FFSpeedDate");
-
         public FFSpeedDate(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] CommandManager commandManager)
@@ -29,7 +30,6 @@ namespace FFSpeedDate
             this.Configuration.Initialize(this.PluginInterface);
 
             WindowSystem.AddWindow(new MainWindow(this));
-
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "A useful message to display in /xlhelp"

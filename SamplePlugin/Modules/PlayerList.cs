@@ -1,17 +1,24 @@
+using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
+using Dalamud.IoC;
+using Dalamud.Utility;
 using FFSpeedDate.Models;
 using FFSpeedDate.Windows;
 using ImGuiNET;
+using Lumina.Excel.GeneratedSheets;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 
 namespace FFSpeedDate.Modules
 {
     public class PlayerList
     {
-        private readonly MainWindow mainWindow;
+        private readonly MainWindow MainWindow;
         public bool Enabled = false;
         public List<Player> players;
         public Player newPlayer;
@@ -22,7 +29,162 @@ namespace FFSpeedDate.Modules
         public PlayerList(MainWindow mainWindow)
         {
             newPlayer = new Player();
-            this.mainWindow = mainWindow;
+            players = new List<Player>()
+            {
+                new Player()
+                {
+                    FirstName = "name",
+                    SecondName = "snarrme",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "srrrrrrrrrname",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snamthxykrrrrre",
+                    Gender = Gender.Female,
+                    LikesMale = true,
+                    LikesFemale= false,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snadfthjxdftme",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snagjjfyjfye",
+                    Gender = Gender.Female,
+                    LikesMale = true,
+                    LikesFemale= false,
+                },
+                new Player()
+                {
+                    FirstName = "ndamergdgdr",
+                    SecondName = "sname",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snamfghfghfe",
+                    Gender = Gender.Male,
+                    LikesMale = false,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snamhgfhfghfe",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndame",
+                    SecondName = "snamwetwetsggeggwe",
+                    Gender = Gender.Female,
+                    LikesMale = false,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndamewetwtetwet",
+                    SecondName = "sname",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndamssssse",
+                    SecondName = "sname",
+                    Gender = Gender.Female,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndawetwetwetwme",
+                    SecondName = "snassssme",
+                    Gender = Gender.Female,
+                    LikesMale = false,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndamwetwete",
+                    SecondName = "snssame",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= false,
+                },
+                new Player()
+                {
+                    FirstName = "ndassssqasdame",
+                    SecondName = "sname",
+                    Gender = Gender.Male,
+                    LikesMale = false,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndaewefwfme",
+                    SecondName = "sname",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndamtwetwetwe",
+                    SecondName = "sname",
+                    Gender = Gender.Female,
+                    LikesMale = false,
+                    LikesFemale= true,
+                },
+                new Player()
+                {
+                    FirstName = "ndwtwetwetame",
+                    SecondName = "sname",
+                    Gender = Gender.Male,
+                    LikesMale = true,
+                    LikesFemale= false,
+                },
+                new Player()
+                {
+                    FirstName = "ndwetwetwetame",
+                    SecondName = "sname",
+                    Gender = Gender.Female,
+                    LikesMale = true,
+                    LikesFemale= false,
+                },
+                new Player()
+                {
+                    FirstName = "ndwetwetwsssetame",
+                    SecondName = "sname",
+                    Gender = Gender.Female,
+                    LikesMale = true,
+                    LikesFemale= false,
+                }
+            };
+            MainWindow = mainWindow;
             Config = MainWindow.Config;
             Initialize();
         }
@@ -39,9 +201,20 @@ namespace FFSpeedDate.Modules
         public void DrawPlayerList()
         {
             ImGui.Text("Add Player:");
+            ImGui.SameLine();
+            if (ImGui.Button("Add Target")) {
+                AddTarget();
+            }
+            ImGui.SameLine();
+            if (ImGui.Button("Clear Input"))
+            {
+                Clear();
+            }
             DrawAddPlayer();
 
             ImGui.Text("Player List:");
+            ImGui.SameLine();
+            ImGui.Text(players.Count.ToString());
             DrawPlayers();
         }
 
@@ -82,7 +255,11 @@ namespace FFSpeedDate.Modules
             ImGui.NextColumn();
             ImGui.Checkbox($"###likesFemale", ref newPlayer.LikesFemale);
             ImGui.NextColumn();
-            ImGui.Button($"###addPlayer", new Vector2(40,25));
+            if (ImGui.Button("Add"))
+            {
+                AddPlayer();
+                MainWindow.Match.Initialize();
+            }
             ImGui.NextColumn();
 
             ImGui.Separator();
@@ -128,7 +305,11 @@ namespace FFSpeedDate.Modules
                 ImGui.NextColumn();
                 ImGui.Text(player.LikesFemale ? "Yes" : "No");
                 ImGui.NextColumn();
-                ImGui.Button($"###removePlayer", new Vector2(40, 25));
+                if (ImGui.Button("Delete", new Vector2(40, 25)))
+                {                  
+                    players.Remove(player);
+                    MainWindow.Match.Initialize();
+                };
                 ImGui.NextColumn();
                 ImGui.Separator();
             }
@@ -136,6 +317,42 @@ namespace FFSpeedDate.Modules
            
             ImGui.Columns(1);
         }
+        private void AddPlayer()
+        {
+            if (string.IsNullOrEmpty(newPlayer.FirstName) && string.IsNullOrEmpty(newPlayer.FirstName))
+                return;
+
+            if (newPlayer.LikesMale == false && newPlayer.LikesFemale == false)
+                return;
+
+            if (players.FirstOrDefault(p => p.FirstName.ToLower().Equals(newPlayer.FirstName.ToLower()) && p.SecondName.ToLower().Equals(newPlayer.SecondName.ToLower())) == null)
+            {
+                newPlayer.Gender = (Gender)gender;
+                Player p = new Player()
+                {
+                    FirstName = newPlayer.FirstName,
+                    SecondName = newPlayer.SecondName,
+                    Gender = newPlayer.Gender,
+                    LikesFemale = newPlayer.LikesFemale,
+                    LikesMale = newPlayer.LikesMale,
+                };
+                players.Add(p);
+            }
+        }
+
+        private void AddTarget()
+        {
+            var target = FFSpeedDate.ClientState.LocalPlayer.TargetObject;
+            if (target.ObjectKind == Dalamud.Game.ClientState.Objects.Enums.ObjectKind.Player)
+            {          
+                newPlayer.FirstName = target.Name.TextValue.Split(" ").First();
+                newPlayer.SecondName = target.Name.TextValue.Split(" ").Last();
+            }                  
+        }
+
+        private void Clear()
+        {
+            newPlayer = new Player();
+        }
     }
-    
 }

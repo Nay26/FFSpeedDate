@@ -49,14 +49,9 @@ public class MainWindow : Window, IDisposable
 
         switch (currentMainTab)
         {
-            case MainTab.Config:
-                {
-                    DrawConfig();
-                    break;
-                }
             case MainTab.PlayerList:
                 {
-                    PlayerList?.DrawPlayerList();
+                    PlayerList.DrawPlayerList();
                     break;
                 }
             case MainTab.Match:
@@ -70,7 +65,7 @@ public class MainWindow : Window, IDisposable
                     break;
                 }
             default:
-                PlayerList?.DrawPlayerList();
+                PlayerList.DrawPlayerList();
                 break;
         }
 
@@ -80,12 +75,6 @@ public class MainWindow : Window, IDisposable
     {
         if (ImGui.BeginTabBar("FFSpeedDateMainTabBar", ImGuiTabBarFlags.NoTooltip))
         {
-            if (ImGui.BeginTabItem("Config###FFSpeedDate_Config_MainTab"))
-            {
-                currentMainTab = MainTab.Config;
-                ImGui.EndTabItem();
-            }
-
             if (ImGui.BeginTabItem("Player List###FFSpeedDate_PlayerList_MainTab"))
             {
                 currentMainTab = MainTab.PlayerList;
@@ -108,21 +97,6 @@ public class MainWindow : Window, IDisposable
             ImGui.Spacing();
         }
     }
-
-    private void DrawConfig()
-    {
-        ImGui.Text("Use Preferences?");
-
-        ImGui.Columns(1);
-        ImGui.Separator();
-        ImGuiHelpers.ScaledDummy(5);
-
-        if (ImGui.Button("Save"))
-        {
-            Config.Save();
-        }
-    }
-
     private void DrawAbout()
     {
         ImGui.TextColored(ImGuiColors.DalamudGrey, "About");

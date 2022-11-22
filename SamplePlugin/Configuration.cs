@@ -3,7 +3,7 @@ using Dalamud.Plugin;
 using System;
 
 namespace FFSpeedDate { 
-    public enum MainTab { Config, PlayerList, Match, About }
+    public enum MainTab { PlayerList, Match, About }
 
     [Serializable]
     public class Configuration : IPluginConfiguration
