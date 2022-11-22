@@ -102,8 +102,6 @@ public class MainWindow : Window, IDisposable
         ImGui.TextColored(ImGuiColors.DalamudGrey, "About");
         ImGui.TextWrapped("Made by Adiana Umbra@Cerberus");
         ImGui.TextWrapped("Thanks to Primu Pyon@Omega who's code I have shamelessly modified");
-        ImGui.TextWrapped("Originally intended for use by staff working for Emerald Lynx Club @Omega-Goblet-W10P30");
-        ImGui.TextWrapped("But made available for use by anyone who happens upon my repo link.");
         ImGui.Separator();
 
         ImGui.Columns(1);
