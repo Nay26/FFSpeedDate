@@ -1,4 +1,4 @@
-{
+[{
   "Author": "Adiana",
   "Name": "FFSpeedDate",
   "InternalName": "FFSpeedDate",
@@ -17,4 +17,4 @@
   "IsTestingExclusive": false,
   "DownloadLinkTesting": "https://github.com/Nay26/FFSpeedDate/blob/master/bin/latest.zip",
   "DownloadLinkUpdate": "https://github.com/Nay26/FFSpeedDate/blob/master/bin/latest.zip",
-}
+}]
