@@ -12,9 +12,9 @@
   "DalamudApiLevel": 7,
   "LoadPriority": 0,
   "Punchline": "A speed dating matchmaker"
-  "DownloadLinkInstall": "https://github.com/Nay26/FFSpeedDate/blob/master/bin/latest.zip",
+  "DownloadLinkInstall": "https://github.com/Nay26/FFSpeedDate/raw/master/bin/latest.zip",
   "IsHide": false,
   "IsTestingExclusive": false,
-  "DownloadLinkTesting": "https://github.com/Nay26/FFSpeedDate/blob/master/bin/latest.zip",
-  "DownloadLinkUpdate": "https://github.com/Nay26/FFSpeedDate/blob/master/bin/latest.zip",
+  "DownloadLinkTesting": "https://github.com/Nay26/FFSpeedDate/raw/master/bin/latest.zip",
+  "DownloadLinkUpdate": "https://github.com/Nay26/FFSpeedDate/raw/master/bin/latest.zip"
 }]
